@@ -14,7 +14,8 @@ import fi.helsinki.cs.scheduler3000.Weekday.Day;
 public class WeekReport extends Report {
 
 	public WeekReport(Schedule schedule, HashMap<String, Object> options) {
-		super(schedule, options);
+		this.schedule = schedule;
+		this.options = options;
 	}
 
 	@Override
