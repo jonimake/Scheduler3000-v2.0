@@ -7,9 +7,11 @@ package fi.helsinki.cs.scheduler3000;
 
 public class Event {
 
-	// FIXME
-	public static final String[] VALID_START_TIMES = {"08", "10", "12", "14", "16", "18" };
-	public static final String[] VALID_END_TIMES = {"10", "12", "14", "16", "18", "20" };
+	/*
+	 * Muutettu valid_timet privaateiksi ja getterit tehty
+	 */
+	private static final String[] VALID_START_TIMES = {"08", "10", "12", "14", "16", "18" };
+	private static final String[] VALID_END_TIMES = {"10", "12", "14", "16", "18", "20" };
 	private String startTime;
 	private String endTime;
 	private String location;
@@ -46,11 +48,11 @@ public class Event {
 	}
 
 	public void setStartTime(String startTime) {
-		if (checkIfValid(startTime, VALID_START_TIMES)){		
+		if (checkIfValid(startTime, getValidStartTimes())){		
 			this.startTime = startTime;
 		}
 		else {
-			throw new IllegalArgumentException("Start time must be one of the following: " + getAllValidValues(VALID_START_TIMES));
+			throw new IllegalArgumentException("Start time must be one of the following: " + getAllValidValues(getValidStartTimes()));
 		}
 	}
 
@@ -59,11 +61,11 @@ public class Event {
 	}
 
 	public void setEndTime(String endTime) {
-		if (checkIfValid(endTime, VALID_END_TIMES)){
+		if (checkIfValid(endTime, getValidEndTimes())){
 			this.endTime = endTime;
 		}
 		else {
-			throw new IllegalArgumentException("End time must be one of the following: "+ getAllValidValues(VALID_END_TIMES));
+			throw new IllegalArgumentException("End time must be one of the following: "+ getAllValidValues(getValidEndTimes()));
 		}
 	}
 
@@ -98,5 +100,21 @@ public class Event {
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * @return the validStartTimes
+	 */
+	public static String[] getValidStartTimes()
+	{
+		return VALID_START_TIMES;
+	}
+
+	/**
+	 * @return the validEndTimes
+	 */
+	public static String[] getValidEndTimes()
+	{
+		return VALID_END_TIMES;
 	}
 }
