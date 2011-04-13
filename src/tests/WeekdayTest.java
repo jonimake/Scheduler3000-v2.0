@@ -9,6 +9,7 @@ import junit.framework.TestCase;
 import org.junit.*;
 
 import fi.helsinki.cs.scheduler3000.Weekday;
+import fi.helsinki.cs.scheduler3000.Weekday.Day;
 
 public class WeekdayTest extends TestCase {
 
@@ -21,47 +22,17 @@ public class WeekdayTest extends TestCase {
 	}
 	
 	@Test
-	public void testIntToEnumMap(){
-		// is initiated
-		assertNotNull(Weekday.intToEnumMap);
-		
-		// has the same number of values
-		assertEquals(Weekday.Day.values().length, Weekday.intToEnumMap.size());
-		
-		// all values match
-		int counter = 0;
-		for (Weekday.Day mapVal : Weekday.intToEnumMap.values()){
-			for (Weekday.Day realVal : Weekday.Day.values()){
-				if (mapVal.compareTo(realVal) == 0){
-					counter++;
-				}
-			}
-		}	
-		assertEquals(Weekday.Day.values().length, counter);
-	}
-	
-	@Test
-	public void testEnumToIntMap(){
-		assertNotNull(Weekday.enumToIntMap);
-		
-		assertEquals(Weekday.Day.values().length, Weekday.enumToIntMap.size());
-		
-		int counter = 0;
-		for (Weekday.Day mapVal : Weekday.enumToIntMap.keySet()){
-			for (Weekday.Day realVal : Weekday.Day.values()){
-				if (mapVal.compareTo(realVal) == 0){
-					counter++;
-				}
-			}
-		}
-		assertEquals(Weekday.Day.values().length, counter);
-	}
-	
-	@Test
-	public void testLongNameMap(){
-		assertNotNull(Weekday.longNameMap);
-		
-		assertEquals(Weekday.Day.values().length, Weekday.longNameMap.size());
+	public void testDayToString() {
+		assertTrue(Weekday.dayToString(Day.WED) != null);
 	}
 
+	@Test
+	public void testDayToInt() {
+		assertTrue(Weekday.dayToInt(Day.WED) == 3);
+	}
+	
+	@Test
+	public void testIntToDay() {
+		assertTrue(Weekday.intToDay(3) == Day.WED);
+	}
 }

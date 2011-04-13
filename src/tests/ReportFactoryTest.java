@@ -45,7 +45,7 @@ public class ReportFactoryTest extends TestCase {
 		
 		Report r = ReportFactory.makeReport(ReportFactory.ReportType.DAY, sched, options);
 		assertTrue(r.toString() != null);
-		assertTrue(r.toString().contains(Weekday.longNameMap.get(Weekday.Day.MON)));
+		assertTrue(r.toString().contains(Weekday.dayToString(Weekday.Day.MON)));
 	}
 
 	@Test

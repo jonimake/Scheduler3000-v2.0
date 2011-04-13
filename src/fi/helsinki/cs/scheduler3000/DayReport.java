@@ -6,6 +6,7 @@ package fi.helsinki.cs.scheduler3000;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import fi.helsinki.cs.scheduler3000.Weekday.Day;
@@ -28,8 +29,8 @@ public class DayReport extends Report {
 			if (events == null) {
 				return null;
 			}
-			
-			res += Weekday.longNameMap.get(weekday) + ":\n------\n";
+			Collections.sort(events);
+			res += Weekday.dayToString(weekday) + ":\n------\n";
 			
 			for (Event e : events){
 				if(e.getTitle().equals("")){

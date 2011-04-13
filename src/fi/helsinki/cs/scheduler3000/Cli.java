@@ -95,7 +95,7 @@ public class Cli {
 			return false;
 		}
 		// check if specified date is in the schedule
-		return schedule.getSchedule().containsKey(Weekday.intToEnumMap.get(Integer.parseInt(in)));
+		return schedule.getSchedule().containsKey(Weekday.intToDay(Integer.parseInt(in)));
 	}
 
 	private static HashMap<String, Object> getOptions(String key, Day value) {
@@ -127,9 +127,9 @@ public class Cli {
 				return;
 			}
 
-			startTime = outputUtils.askDate("What is the start time?");
-			
-			endTime = outputUtils.askDate("What is the end time?");
+			startTime = outputUtils.askDate("What is the start time?", Event.getValidStartTimes());
+
+			endTime = outputUtils.askDate("What is the end time?", Event.getValidEndTimes());
 
 			System.out.println("What this event should be named as?");
 			System.out.println("(just press enter to skip this)");
@@ -146,7 +146,7 @@ public class Cli {
 					continue;
 				}
 
-				eventDay = Weekday.intToEnumMap.get(Integer.parseInt(eventDayTemp));
+				eventDay = Weekday.intToDay(Integer.parseInt(eventDayTemp));
 				event = new Event(startTime, endTime, title, location);
 				break; // success, get out of the do-while
 
@@ -207,7 +207,7 @@ public class Cli {
 
 		ArrayList<Day> days = new ArrayList<Day>();
 		for(Integer d : dates){
-			days.add(Weekday.intToEnumMap.get(d));
+			days.add(Weekday.intToDay(d));
 		}
 
 		schedule = new Schedule(days);//, period);
@@ -312,13 +312,13 @@ public class Cli {
 				System.out.println("Which day you want to see your schedule for?");
 				outputUtils.printDates();
 				outputUtils.printPrompt();
-				in = input.nextLine();
+				in = input.nextLine(); // 1
 				if (!outputUtils.checkDate(in)){
 					System.out.println("Unvalid date");
 					break;
 				}
 
-				Day day = Weekday.intToEnumMap.get(Integer.parseInt(in));
+				Day day = Weekday.intToDay(Integer.parseInt(in));
 				return ReportFactory.makeReport(ReportFactory.ReportType.DAY, schedule, getOptions("day", day));
 
 			case 'f':
@@ -343,7 +343,7 @@ public class Cli {
 						System.out.println("Unvalid date");
 					}
 					else {
-						days.add(Weekday.intToEnumMap.get(Integer.parseInt(in)));
+						days.add(Weekday.intToDay(Integer.parseInt(in)));
 					}
 				}
 
@@ -454,7 +454,7 @@ public class Cli {
 	public static void printReportDialogToScreenDialog() {
 		Report report = printReportDialog();
 		if (report != null){
-			System.out.println(printReportDialog());
+			System.out.println(report);
 		}
 		
 	}	

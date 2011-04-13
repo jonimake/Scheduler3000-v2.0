@@ -5,7 +5,7 @@ package fi.helsinki.cs.scheduler3000;
  */
 
 
-public class Event {
+public class Event implements Comparable<Event> {
 
 	/*
 	 * Muutettu valid_timet privaateiksi ja getterit tehty
@@ -93,7 +93,7 @@ public class Event {
 	 * @return true if value is valid, ie. 
 	 * @return false if startTime didn't match a valid start time.
 	 */
-	private boolean checkIfValid(String value, String[] allValids){
+	public static boolean checkIfValid(String value, String[] allValids){
 		for (String valid : allValids){
 			if (value.equalsIgnoreCase(valid)){
 				return true;
@@ -116,5 +116,11 @@ public class Event {
 	public static String[] getValidEndTimes()
 	{
 		return VALID_END_TIMES;
+	}
+
+	@Override
+	public int compareTo(Event arg0)
+	{
+		return (this.startTime.compareTo(((Event)arg0).startTime));
 	}
 }

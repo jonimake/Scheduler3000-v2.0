@@ -8,31 +8,29 @@ package fi.helsinki.cs.scheduler3000;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
-
 import fi.helsinki.cs.scheduler3000.Weekday.Day;
 
 public class Schedule implements Serializable {
 	
-    private String period;
+    //private String period;
     private HashMap<Day, ArrayList<Event>> schedule;
 
     // CONSTRUCTORS
     
     // this constructor is solely for mock objects to use, hence protected
     protected Schedule(){ 
-    	this.period = null;
+    	//this.period = null;
     	this.schedule = null;
     }
     
     public Schedule(ArrayList<Day> week){
         this.setSchedule(week);
-        this.period = null;
+        //this.period = null;
     }
     
     public Schedule(ArrayList<Day> week, String period){
     	this.setSchedule(week);
-    	this.period = period;
+    	//this.period = period;
     }
 
     // GETTERS AND SETTERS
@@ -55,13 +53,13 @@ public class Schedule implements Serializable {
     
     public void setSchedule(Schedule newSchedule) {
 		this.schedule = newSchedule.getSchedule();
-		this.period = newSchedule.getPeriod();
+		//this.period = newSchedule.getPeriod();
 	}
 
     public HashMap<Day, ArrayList<Event>> getSchedule(){
 		return this.schedule; 
 	}
-
+/*
 	public String getPeriod() {
 		return period;
 	}
@@ -69,7 +67,7 @@ public class Schedule implements Serializable {
 	public void setPeriod(String period) {
 		this.period = period;
 	}
-    
+*/
     // OTHER
 	public void addEvent(Day eventDay, Event event) {
 		if (!this.schedule.containsKey(eventDay)){ // if adding an event to non-existent date

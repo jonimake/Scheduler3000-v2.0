@@ -31,22 +31,22 @@ public class MockSchedule extends Schedule {
 	public void addEvent(Day eventDay, Event event) {
 		schedule.get(eventDay).add(event);
 	}
-
+/*
 	@Override
 	public String getPeriod() {
 		return this.period;
 	}
-
+*/
 	@Override
 	public HashMap<Day, ArrayList<Event>> getSchedule() {
 		return this.schedule;
 	}
-
+/*
 	@Override
 	public void setPeriod(String period) {
 		this.period = period;
 	}
-
+*/
 	@Override
 	public void setSchedule(ArrayList<Day> newSchedule) {
 		this.schedule = new HashMap<Day, ArrayList<Event>>();
