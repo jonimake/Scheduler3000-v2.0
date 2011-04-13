@@ -68,6 +68,11 @@ public class Cli {
 				printReportToFileDialog();
 				break;
 				
+			case 'c':
+				FileOutput fo = FileOutputFactory.makeFileOutput(FileOutputFactory.FileType.CSV, schedule);
+				fo.writeToFile("output.csv");
+				break;
+				
 			case 'n':
 				newScheduleDialog();
 				break;
@@ -182,7 +187,7 @@ public class Cli {
 		printPrompt();
 		String period = input.nextLine();
 */
-		System.out.println("Give dates you want to include in the scedule");
+		System.out.println("Give dates you want to include in the schedule");
 		System.out.println("Stop giving the dates by entering \""+endCommand+"\"");
 		System.out.println("One at a time, please");
 
@@ -286,6 +291,7 @@ public class Cli {
 			System.out.println("[S]ave schedule to file");
 			System.out.println("[P]rint a report on screen");
 			System.out.println("Print a report to [F]ile");
+			System.out.println("[C]reate CSV file");
 		}
 		System.out.println("[Q]uit");
 	}
