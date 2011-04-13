@@ -35,7 +35,7 @@ public class Cli {
 		do {
 			System.out.println();
 			printCommands();
-			printPrompt();
+			outputUtils.printPrompt();
 			foo = sanitize(input.nextLine());
 
 			switch (foo) {
@@ -44,7 +44,7 @@ public class Cli {
 				if (schedule == null){ // cannot do this if schedule is not existing
 					break;
 				}
-				printReportDialogToScreenDialog();
+				Cli.printReportDialogToScreenDialog();
 				break;
 				
 			case 'a':
@@ -89,31 +89,9 @@ public class Cli {
 
 	}
 
-	private static boolean checkDate(String in) {
-		Integer day = null;
-		// try-catch makes sure that input is numeric 
-		try {
-
-			day = Integer.parseInt(in);
-			// check if day is indeed a valid number
-			if (day > 0 && day < 8){
-				return true; // day ok, exit!
-			}
-
-			System.out.println("Sorry, but \""+day+"\" is not a valid number for date");
-
-
-		} catch (NumberFormatException e) {	
-			System.out.println("Sorry, cannot parse \""+in+"\"");
-		}	
-
-		return false;
-
-	}
-
 	private static boolean checkDate(String in, Schedule schedule) {
 		// check if the date is valid at all
-		if (!checkDate(in)){
+		if (!outputUtils.checkDate(in)){
 			return false;
 		}
 		// check if specified date is in the schedule
@@ -141,34 +119,30 @@ public class Cli {
 			System.out.println("");
 
 			System.out.println("Which day is the event?");
-			printDates();
-			printPrompt();
+			outputUtils.printDates();
+			outputUtils.printPrompt();
 			eventDayTemp =  input.nextLine();
 
 			if (eventDayTemp.equals(endCommand)){
 				return;
 			}
 
-			System.out.println("What is the start time?");
-			printPrompt();
-			startTime = input.nextLine();
-
-			System.out.println("What is the end time?");
-			printPrompt();
-			endTime = input.nextLine();
+			startTime = outputUtils.askDate("What is the start time?");
+			
+			endTime = outputUtils.askDate("What is the end time?");
 
 			System.out.println("What this event should be named as?");
 			System.out.println("(just press enter to skip this)");
-			printPrompt();
+			outputUtils.printPrompt();
 			title = input.nextLine();
 
 			System.out.println("Where this event is held?");
 			System.out.println("(just press enter to skip this)");
-			printPrompt();
+			outputUtils.printPrompt();
 			location = input.nextLine();
 
 			try {
-				if (!checkDate(eventDayTemp)){
+				if (!outputUtils.checkDate(eventDayTemp)){
 					continue;
 				}
 
@@ -203,26 +177,26 @@ public class Cli {
 	private static void newScheduleDialog() {
 		String in = null;
 		HashSet<Integer> dates = new HashSet<Integer>();
-
+/*
 		System.out.println("Enter the period this schedule is for:");
 		printPrompt();
 		String period = input.nextLine();
-
+*/
 		System.out.println("Give dates you want to include in the scedule");
 		System.out.println("Stop giving the dates by entering \""+endCommand+"\"");
 		System.out.println("One at a time, please");
 
 		do {
-			printDates();
-			printSelection(dates);
-			printPrompt();
+			outputUtils.printDates();
+			outputUtils.printSelection(dates);
+			outputUtils.printPrompt();
 			in = input.nextLine().trim();
 
 			if (in.toLowerCase().equals(endCommand)){
 				break;
 			}
 			else {
-				if(checkDate(in.trim())){
+				if(outputUtils.checkDate(in.trim())){
 					dates.add(Integer.parseInt(in.trim()));
 				}
 			}
@@ -236,7 +210,7 @@ public class Cli {
 			days.add(Weekday.intToEnumMap.get(d));
 		}
 
-		schedule = new Schedule(days, period);
+		schedule = new Schedule(days);//, period);
 
 		System.out.println("ok!");
 
@@ -276,7 +250,7 @@ public class Cli {
 
 	private static void openScheduleDialog() {
 		System.out.println("Give name of the file to be opened");
-		printPrompt();
+		outputUtils.printPrompt();
 		String filename = input.nextLine().trim();
 		while (true) {
 			
@@ -316,32 +290,6 @@ public class Cli {
 		System.out.println("[Q]uit");
 	}
 
-	private static void printDates() {
-		System.out.print("Dates are: ");
-		for (Day d : Day.values()){
-			System.out.print(Weekday.enumToIntMap.get(d));
-			System.out.print(" - ");
-			System.out.print(Weekday.longNameMap.get(d));
-			System.out.print(" ");
-		}	
-		System.out.println();
-	}
-
-	private static void printDates(Schedule schedule) {
-		System.out.print("Dates are: ");
-		for (Day d : schedule.getSchedule().keySet()){
-			System.out.print(Weekday.enumToIntMap.get(d));
-			System.out.print(" - ");
-			System.out.print(Weekday.longNameMap.get(d));
-			System.out.print(" ");
-		}	
-		System.out.println();
-	}
-
-	private static void printPrompt() {
-		System.out.print("?>");
-	}
-
 	private static Report printReportDialog() {
 		Character command = null;
 
@@ -353,7 +301,7 @@ public class Cli {
 				System.out.print(" ");
 			}
 			System.out.println("[N]one");
-			printPrompt();
+			outputUtils.printPrompt();
 			command = sanitize(input.nextLine());
 			String in = null;
 
@@ -362,10 +310,10 @@ public class Cli {
 			case 'd':
 
 				System.out.println("Which day you want to see your schedule for?");
-				printDates();
-				printPrompt();
+				outputUtils.printDates();
+				outputUtils.printPrompt();
 				in = input.nextLine();
-				if (!checkDate(in)){
+				if (!outputUtils.checkDate(in)){
 					System.out.println("Unvalid date");
 					break;
 				}
@@ -384,8 +332,8 @@ public class Cli {
 
 				while (true){
 					// print only available dates
-					printDates(schedule);
-					printPrompt();
+					outputUtils.printDates(schedule);
+					outputUtils.printPrompt();
 
 					in = input.nextLine();
 					if (in.equals(endCommand)) {
@@ -423,7 +371,7 @@ public class Cli {
 			System.out.println("Give full file name and path (if applicable)");
 			
 			while (true){
-				printPrompt();
+				outputUtils.printPrompt();
 				try {
 					filename = input.nextLine().trim();
 					out = new PrintWriter(filename);
@@ -440,24 +388,7 @@ public class Cli {
 		}
 	}
 
-	private static void printReportDialogToScreenDialog() {
-		Report report = printReportDialog();
-		if (report != null){
-			System.out.println(printReportDialog());
-		}
-		
-	}
-
-	private static void printSelection(HashSet<Integer> dates) {
-		if (dates.size() > 0){
-			System.out.print("You have selected: ");
-			for (Integer d : dates){
-				System.out.print(Weekday.longNameMap.get(Weekday.intToEnumMap.get(d)));
-				System.out.print(" ");
-			}
-			System.out.println();
-		}
-	}
+	
 
 	private static Character sanitize(String rawInput){
 		return new Character(rawInput.toLowerCase().charAt(0));
@@ -499,7 +430,7 @@ public class Cli {
 	private static void saveScheduleDialog() {
 		System.out.println("Give name of the file to open");
 		System.out.println("Notice that file will be saved with .dat-extension, eg. \"myfile\" will be \"myfile.dat\" ");
-		printPrompt();
+		outputUtils.printPrompt();
 		String filename = input.nextLine().trim() + ".dat";
 		while (true){
 			if (save(filename)){
@@ -518,6 +449,14 @@ public class Cli {
 			}
 		}
 		System.out.println("Schedule saved as \"" + filename + "\"");
+	}
+
+	public static void printReportDialogToScreenDialog() {
+		Report report = printReportDialog();
+		if (report != null){
+			System.out.println(printReportDialog());
+		}
+		
 	}	
 
 }
