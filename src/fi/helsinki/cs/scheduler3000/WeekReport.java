@@ -26,8 +26,8 @@ public class WeekReport extends Report {
 
 			res[0][0] = "\t";
 			
-			for (int i = 1, j = 0; j < Event.VALID_START_TIMES.length; i++, j++){
-				res[0][i] = Event.VALID_START_TIMES[j] + "\t";
+			for (int i = 1, j = 0; j < Event.getValidStartTimes().length; i++, j++){
+				res[0][i] = Event.getValidStartTimes()[j] + "\t";
 			}	
 
 			int i = 1;

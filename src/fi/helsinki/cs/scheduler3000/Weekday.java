@@ -5,6 +5,7 @@ package fi.helsinki.cs.scheduler3000;
  */
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 
@@ -14,6 +15,9 @@ public class Weekday {
 	public static HashMap<Integer, Day> intToEnumMap = new HashMap<Integer, Day>();
 	public static HashMap<Day, Integer> enumToIntMap = new HashMap<Day, Integer>();
 	public static HashMap<Day, String> longNameMap = new HashMap<Day, String>();
+	public static enum longName { Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday };
+	private ArrayList<String> Days = new ArrayList<String>();
+	
 	
 	// make handy hashmaps  
 	static {
