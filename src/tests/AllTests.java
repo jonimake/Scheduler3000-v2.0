@@ -18,7 +18,7 @@ public class AllTests {
 		suite.addTestSuite(ReportFactoryTest.class);
 		suite.addTestSuite(WeekdayTest.class);
 		suite.addTestSuite(ScheduleTest.class);
-		
+		suite.addTestSuite(FileOutputFactoryTest.class);
 		return suite;
 	}
 
