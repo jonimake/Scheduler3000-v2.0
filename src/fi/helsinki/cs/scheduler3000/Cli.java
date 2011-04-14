@@ -188,11 +188,7 @@ public class Cli
 
 		try
 		{
-			schedule.setSchedule((Schedule) objectInput.readObject()); // have
-																	   // to
-																	   // cast
-																	   // the
-																	   // object
+			schedule.setSchedule((Schedule) objectInput.readObject());
 			return true;
 		} catch (IOException e)
 		{
@@ -250,8 +246,9 @@ public class Cli
 
 		System.out.println("0: None");
 		List<String> reportTypes = ReportFactory.getReportTypes();
-		for (int i = 0; i < reportTypes.size(); i++)
-			System.out.println((i + 1) + ": " + reportTypes.get(i));
+		int i = 1;
+		for (String reportType : reportTypes)
+			System.out.println(i++ + ": " + reportType);
 
 		int choice = InputUtils.askInt("Report type", 0, reportTypes.size());
 		if (choice == 0)
@@ -294,6 +291,8 @@ public class Cli
 
 	private static Character sanitize(String rawInput)
 	{
+		if(rawInput.length() == 0)
+			return ' ';
 		return new Character(rawInput.toLowerCase().charAt(0));
 	}
 
