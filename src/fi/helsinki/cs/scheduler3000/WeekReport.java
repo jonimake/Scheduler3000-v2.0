@@ -6,23 +6,29 @@ package fi.helsinki.cs.scheduler3000;
  */
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import fi.helsinki.cs.scheduler3000.Weekday.Day;
 
 public class WeekReport extends Report {
 
-	public WeekReport(Schedule schedule, HashMap<String, Object> options) {
+	public WeekReport(Schedule schedule, Map<String, Object> options) {
 		this.schedule = schedule;
-		this.options = options;
+		setOptions(options);
+	}
+	@Override
+	public void askOptionsFromUser()
+	{
+		List<Weekday.Day> days = InputUtils.askManyWeekdays("Which days do you wish to include in this report", schedule.getDaysInSchedule());
+		options.put("days", days);
 	}
 
 	@Override
 	public String toString() {
 		
 		if (this.options.containsKey("days")){
-			ArrayList<Weekday.Day> days = (ArrayList<Day>)this.options.get("days");			
+			List<Weekday.Day> days = (List<Day>)this.options.get("days");			
 			String[][] res = new String[days.size() + 1][7]; // +1 for header row
 
 			res[0][0] = "\t";
@@ -39,7 +45,7 @@ public class WeekReport extends Report {
 			
 			i = 1;
 			for (Day d : days){		
-				ArrayList<Event> events = this.schedule.getSchedule().get(d); 
+				List<Event> events = this.schedule.getSchedule().get(d); 
 				
 				if (events == null){
 					return null;

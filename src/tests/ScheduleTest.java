@@ -6,6 +6,8 @@ package tests;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import junit.framework.TestCase;
 import org.junit.*;
@@ -18,7 +20,7 @@ public class ScheduleTest extends TestCase {
 	Schedule schedule;
 	ArrayList<Day> week;
 	ArrayList<Event> events;
-	HashMap<Day, ArrayList<Event>> map;
+	Map<Day, List<Event>> map;
 	
 	@Before
 	public void setUp() throws Exception {
@@ -37,7 +39,7 @@ public class ScheduleTest extends TestCase {
 		events.add(new Event("14", "18", "fifth", "fifthLocation"));
 		events.add(new Event("08", "20", "sixth", "sixthLocation"));
 		
-		map = new HashMap<Day, ArrayList<Event>>();
+		map = new HashMap<Day, List<Event>>();
 		for (Day d : week){
 			map.put(d, events);
 		}

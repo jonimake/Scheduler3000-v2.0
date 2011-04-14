@@ -43,7 +43,7 @@ public class ReportFactoryTest extends TestCase {
 		// make options
 		options.put("day", Weekday.Day.MON);
 		
-		Report r = ReportFactory.makeReport(ReportFactory.ReportType.DAY, sched, options);
+		Report r = ReportFactory.makeReport("Day", sched, options);
 		assertTrue(r.toString() != null);
 		assertTrue(r.toString().contains(Weekday.dayToString(Weekday.Day.MON)));
 	}
@@ -52,7 +52,7 @@ public class ReportFactoryTest extends TestCase {
 	public void testDayReportWithEmptyOptions(){
 		// options are empty after setUp
 		
-		Report r = ReportFactory.makeReport(ReportFactory.ReportType.DAY, sched, options);
+		Report r = ReportFactory.makeReport("Day", sched, options);
 		assertNull(r.toString());
 	}
 
@@ -61,7 +61,7 @@ public class ReportFactoryTest extends TestCase {
 	public void testDayReportWithFalseOptions(){
 		options.put("day", Weekday.Day.SAT); // no Saturday in schedule
 		
-		Report r = ReportFactory.makeReport(ReportFactory.ReportType.DAY, sched, options);
+		Report r = ReportFactory.makeReport("Day", sched, options);
 		assertNull(r.toString());
 	}
 
@@ -73,7 +73,7 @@ public class ReportFactoryTest extends TestCase {
 		daylist.add(Weekday.Day.THU);
 		options.put("days", daylist);
 		
-		Report r = ReportFactory.makeReport(ReportFactory.ReportType.WEEK, sched, options);
+		Report r = ReportFactory.makeReport("Week", sched, options);
 		assertTrue(r.toString() != null);
 		assertTrue(r.toString().contains("MON"));
 		assertTrue(r.toString().contains("THU"));
@@ -88,7 +88,7 @@ public class ReportFactoryTest extends TestCase {
 		daylist.add(Weekday.Day.FRI);
 		options.put("days", daylist);
 		
-		Report r = ReportFactory.makeReport(ReportFactory.ReportType.WEEK, sched, options);
+		Report r = ReportFactory.makeReport("Week", sched, options);
 		assertNull(r.toString());
 	}
 	
@@ -96,13 +96,13 @@ public class ReportFactoryTest extends TestCase {
 	public void testWeekReportWithNoOptions(){
 		// options are empty after setUp
 		
-		Report r = ReportFactory.makeReport(ReportFactory.ReportType.WEEK, sched, options);
+		Report r = ReportFactory.makeReport("Week", sched, options);
 		assertNull(r.toString());
 	}
 	
 	@Test
 	public void testFullRaport(){
-		Report r = ReportFactory.makeReport(ReportFactory.ReportType.FULL, sched, options);
+		Report r = ReportFactory.makeReport("Full", sched, options);
 		assertTrue(r.toString() != null);
 		
 		// full report holds label for Monday

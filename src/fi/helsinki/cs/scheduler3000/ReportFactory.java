@@ -5,24 +5,36 @@ package fi.helsinki.cs.scheduler3000;
  */
 
 
+import java.lang.reflect.Constructor;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 public class ReportFactory {
 
-	public static enum ReportType { DAY, WEEK, FULL }
-	
-	public static Report makeReport(ReportType type, Schedule schedule, HashMap<String, Object> options){
-		switch (type) {
-		case DAY:
-			return new DayReport(schedule, options);
-		case WEEK:
-			return new WeekReport(schedule, options);
-		case FULL:
-			return new FullReport(schedule, options);
-		default:
-			return null;
-		}
+	private static Map<String, Class> reports;
+	static {
+		reports = new HashMap<String, Class>();
+		reports.put("Full", FullReport.class);
+		reports.put("Day", DayReport.class);
+		reports.put("Week", WeekReport.class);
 	}
 	
+	public static Report makeReport(String reportName, Schedule schedule, HashMap<String, Object> options){
+		try
+        {
+	        Constructor ctor = reports.get(reportName).getConstructor(Schedule.class, Map.class);
+	        return (Report)ctor.newInstance(schedule, options);
+        } catch (Exception e)
+        {
+        	e.printStackTrace();
+        	return null;
+        }
+	}
+	public static List<String> getReportTypes()
+	{
+		return new ArrayList<String>(reports.keySet());
+	}
 }

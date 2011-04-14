@@ -7,6 +7,7 @@ package tests;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import fi.helsinki.cs.scheduler3000.*;
@@ -16,10 +17,10 @@ public class MockSchedule extends Schedule {
 
 	// CONSTRUCTORS
 	String period;
-	HashMap<Weekday.Day, ArrayList<Event>> schedule;
+	Map<Weekday.Day, List<Event>> schedule;
 
-	public MockSchedule(ArrayList<Weekday.Day> week){
-		this.schedule = new HashMap<Day, ArrayList<Event>>();
+	public MockSchedule(List<Weekday.Day> week){
+		this.schedule = new HashMap<Day, List<Event>>();
 		for (Weekday.Day d : week){
 			this.schedule.put(d, new ArrayList<Event>());
 		}
@@ -31,14 +32,9 @@ public class MockSchedule extends Schedule {
 	public void addEvent(Day eventDay, Event event) {
 		schedule.get(eventDay).add(event);
 	}
-/*
+
 	@Override
-	public String getPeriod() {
-		return this.period;
-	}
-*/
-	@Override
-	public HashMap<Day, ArrayList<Event>> getSchedule() {
+	public Map<Weekday.Day, List<Event>> getSchedule() {
 		return this.schedule;
 	}
 /*
@@ -48,16 +44,16 @@ public class MockSchedule extends Schedule {
 	}
 */
 	@Override
-	public void setSchedule(ArrayList<Day> newSchedule) {
-		this.schedule = new HashMap<Day, ArrayList<Event>>();
+	public void setSchedule(List<Day> newSchedule) {
+		this.schedule = new HashMap<Day, List<Event>>();
 		for (Day d : newSchedule){
 			this.schedule.put(d, new ArrayList<Event>());
 		}
 	}
 
 	@Override
-	public void setSchedule(HashMap<Day, ArrayList<Event>> newSchedule) {
-		this.schedule = schedule;
+	public void setSchedule(Map<Day, List<Event>> newSchedule) {
+		this.schedule = newSchedule;
 	}
 
 	@Override

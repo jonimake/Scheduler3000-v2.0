@@ -7,11 +7,12 @@ package fi.helsinki.cs.scheduler3000;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 
 
 public class FullReport extends Report {
 	
-	public FullReport(Schedule schedule, HashMap<String, Object> options) {
+	public FullReport(Schedule schedule, Map<String, Object> options) {
 		this.options = options;
 		this.schedule = schedule;
 	}

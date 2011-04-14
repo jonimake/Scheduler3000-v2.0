@@ -8,22 +8,23 @@ package fi.helsinki.cs.scheduler3000;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import fi.helsinki.cs.scheduler3000.Weekday.Day;
 
 public class Schedule implements Serializable {
 	
-    //private String period;
-    private HashMap<Day, ArrayList<Event>> schedule;
+    private Map<Day, List<Event>> schedule;
 
-    // CONSTRUCTORS
-    
     // this constructor is solely for mock objects to use, hence protected
     protected Schedule(){ 
     	//this.period = null;
     	this.schedule = null;
     }
     
-    public Schedule(ArrayList<Day> week){
+    public Schedule(List<Day> week){
         this.setSchedule(week);
         //this.period = null;
     }
@@ -36,9 +37,9 @@ public class Schedule implements Serializable {
     // GETTERS AND SETTERS
     
  
-    public void setSchedule(ArrayList<Day> newSchedule){
+    public void setSchedule(List<Day> newSchedule){
     	if (this.schedule == null){
-    		this.schedule = new HashMap<Day, ArrayList<Event>>();
+    		this.schedule = new HashMap<Day, List<Event>>();
     	}
     	
     	// build schedule from given week, initialize empty event-arrays
@@ -47,7 +48,7 @@ public class Schedule implements Serializable {
         }
     }
     
-    public void setSchedule(HashMap<Day, ArrayList<Event>> newSchedule){
+    public void setSchedule(Map<Day, List<Event>> newSchedule){
     	this.schedule = newSchedule;
     }
     
@@ -56,7 +57,7 @@ public class Schedule implements Serializable {
 		//this.period = newSchedule.getPeriod();
 	}
 
-    public HashMap<Day, ArrayList<Event>> getSchedule(){
+    public Map<Day, List<Event>> getSchedule(){
 		return this.schedule; 
 	}
 /*
@@ -75,6 +76,11 @@ public class Schedule implements Serializable {
 		}
 		this.schedule.get(eventDay).add(event);
 	}
+
+	public Set<Day> getDaysInSchedule()
+    {
+		return getSchedule().keySet();
+    }
 
 
 }

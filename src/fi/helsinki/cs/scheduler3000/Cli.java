@@ -12,281 +12,229 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 import fi.helsinki.cs.scheduler3000.Weekday.Day;
 
-public class Cli {
+public class Cli
+{
 
-	private static Scanner input = new Scanner(System.in); 
 	private static Schedule schedule = null;
-	private static final String endCommand = "/q";
-	private static ObjectOutputStream objectOutput;
-	private static ObjectInputStream objectInput;
-	
-	
-	
-	public static void main(String[] args) {
 
-		Character foo;
+	public static void main(String[] args)
+	{
 
-		do {
+		Character choice;
+
+		do
+		{
 			System.out.println();
 			printCommands();
-			outputUtils.printPrompt();
-			foo = sanitize(input.nextLine());
+			choice = sanitize(InputUtils.askLine("Choice"));
 
-			switch (foo) {
-			
-			case 'p':
-				if (schedule == null){ // cannot do this if schedule is not existing
-					break;
-				}
-				Cli.printReportDialogToScreenDialog();
-				break;
-				
-			case 'a':
-				if (schedule == null){ // cannot do this if schedule is not existing 
-					break;
-				}
-				newEventDialog();
-				break;
-				
-			case 's':
-				if (schedule == null) { // cannot do this if schedule is not existing
-					break;
-				}
-				saveScheduleDialog();
-				break;
-				
-			case 'f':
-				if (schedule == null){ // cannot do this if schedule is not existing
-					break;
-				}
-				printReportToFileDialog();
-				break;
-				
-			case 'c':
-				FileOutput fo = FileOutputFactory.makeFileOutput(FileOutputFactory.FileType.CSV, schedule);
-				fo.writeToFile("output.csv");
-				break;
-				
-			case 'n':
-				newScheduleDialog();
-				break;
-				
-			case 'o':
-				openScheduleDialog();
-				break;
-				
-			case 'q':
-				System.exit(0);
-				break;
+			switch (choice)
+			{
 
-			default:
-				System.out.println("Don't know what that command is");
-				break;
-			
+				case 'p':
+					if (schedule == null)
+					{ // cannot do this if schedule is not existing
+						break;
+					}
+					Cli.printReportDialogToScreenDialog();
+					break;
+
+				case 'a':
+					if (schedule == null)
+					{ // cannot do this if schedule is not existing
+						break;
+					}
+					newEventDialog();
+					break;
+
+				case 's':
+					if (schedule == null)
+					{ // cannot do this if schedule is not existing
+						break;
+					}
+					saveScheduleDialog();
+					break;
+
+				case 'f':
+					if (schedule == null)
+					{ // cannot do this if schedule is not existing
+						break;
+					}
+					printReportToFileDialog();
+					break;
+
+				case 'c':
+					FileOutput fo = FileOutputFactory.makeFileOutput(
+					        FileOutputFactory.FileType.CSV, schedule);
+					fo.writeToFile("output.csv");
+					break;
+
+				case 'n':
+					newScheduleDialog();
+					break;
+
+				case 'o':
+					openScheduleDialog();
+					break;
+
+				case 'q':
+					System.exit(0);
+					break;
+
+				default:
+					System.out.println("Don't know what that command is");
+					break;
+
 			}
 		} while (true);
 
 	}
 
-	private static boolean checkDate(String in, Schedule schedule) {
-		// check if the date is valid at all
-		if (!outputUtils.checkDate(in)){
-			return false;
-		}
-		// check if specified date is in the schedule
-		return schedule.getSchedule().containsKey(Weekday.intToDay(Integer.parseInt(in)));
-	}
-
-	private static HashMap<String, Object> getOptions(String key, Day value) {
-		HashMap<String, Object> ret = new HashMap<String, Object>();
-		ret.put(key, value);
-		return ret;
-	}
-
-	private static HashMap<String, Object> getOptions(String key, ArrayList<Day> value) {
-		HashMap<String, Object> ret = new HashMap<String, Object>();
-		ret.put(key, value);
-		return ret;
-	}
-
-	private static void newEventDialog() {
+	private static void newEventDialog()
+	{
 		String startTime = null, endTime = null, location = null, title = null, eventDayTemp;
 		Event event = null;
 		Day eventDay = null;
 
-		do {
+		do
+		{
 			System.out.println("");
 
-			System.out.println("Which day is the event?");
-			outputUtils.printDates();
-			outputUtils.printPrompt();
-			eventDayTemp =  input.nextLine();
+			eventDay = InputUtils.askWeekday("Which day is the event?",
+			        Weekday.WEEKDAYS_SET);
+			startTime = InputUtils.askTime("What is the start time?", Event
+			        .getValidStartTimes());
+			endTime = InputUtils.askTime("What is the end time?", Event
+			        .getValidEndTimes());
+			title = InputUtils
+			        .askLine("What this event should be named as?\n(just press enter to skip this)");
+			location = InputUtils
+			        .askLine("Where this event is held?\n(just press enter to skip this)");
 
-			if (eventDayTemp.equals(endCommand)){
-				return;
-			}
-
-			startTime = outputUtils.askDate("What is the start time?", Event.getValidStartTimes());
-
-			endTime = outputUtils.askDate("What is the end time?", Event.getValidEndTimes());
-
-			System.out.println("What this event should be named as?");
-			System.out.println("(just press enter to skip this)");
-			outputUtils.printPrompt();
-			title = input.nextLine();
-
-			System.out.println("Where this event is held?");
-			System.out.println("(just press enter to skip this)");
-			outputUtils.printPrompt();
-			location = input.nextLine();
-
-			try {
-				if (!outputUtils.checkDate(eventDayTemp)){
-					continue;
-				}
-
-				eventDay = Weekday.intToDay(Integer.parseInt(eventDayTemp));
+			try
+			{
 				event = new Event(startTime, endTime, title, location);
 				break; // success, get out of the do-while
-
-			} catch (IllegalArgumentException e) {
+			} catch (IllegalArgumentException e)
+			{
 
 				System.out.println("Sorry, but some mistakes were made:");
 				System.out.println(e.getMessage());
-
 			}
 		} while (true);
 
 		System.out.print("Adding event to schedule...");
-
-		try {
+		try
+		{
 			schedule.addEvent(eventDay, event);
-		} catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException e)
+		{
 			System.out.println("Something went wrong:");
 			System.out.println(e.getMessage());
 			System.out.println("Sorry, but once more");
 			newEventDialog();
-			return; // this is for when newEventDialog finally succeedes, we don't print out the last ok!'s
+			return; // this is for when newEventDialog finally succeedes, we
+					// don't print out the last ok!'s
 		}
-
 		System.out.println("ok!");
 
 	}
 
-	private static void newScheduleDialog() {
-		String in = null;
-		HashSet<Integer> dates = new HashSet<Integer>();
-/*
-		System.out.println("Enter the period this schedule is for:");
-		printPrompt();
-		String period = input.nextLine();
-*/
-		System.out.println("Give dates you want to include in the schedule");
-		System.out.println("Stop giving the dates by entering \""+endCommand+"\"");
-		System.out.println("One at a time, please");
-
-		do {
-			outputUtils.printDates();
-			outputUtils.printSelection(dates);
-			outputUtils.printPrompt();
-			in = input.nextLine().trim();
-
-			if (in.toLowerCase().equals(endCommand)){
-				break;
-			}
-			else {
-				if(outputUtils.checkDate(in.trim())){
-					dates.add(Integer.parseInt(in.trim()));
-				}
-			}
-
-		} while (true);
+	private static void newScheduleDialog()
+	{
+		List<Day> days = InputUtils.askManyWeekdays(
+		        "Give dates you want to include in the schedule",
+		        Weekday.WEEKDAYS_SET);
 
 		System.out.print("Creating schedule...");
-
-		ArrayList<Day> days = new ArrayList<Day>();
-		for(Integer d : dates){
-			days.add(Weekday.intToDay(d));
-		}
-
-		schedule = new Schedule(days);//, period);
-
-		System.out.println("ok!");
-
+		schedule = new Schedule(days);
 	}
 
-	private static boolean open(String filename) {
-		
-		objectInput = null; // nullify in case something is wrong and it's open
-		
+	private static boolean open(String filename)
+	{
+
+		ObjectInputStream objectInput = null; // nullify in case something is
+											  // wrong and it's open
+
 		FileInputStream fos = null;
-		
-		try {
+
+		try
+		{
 			fos = new FileInputStream(filename);
-		} catch (FileNotFoundException e) {
+		} catch (FileNotFoundException e)
+		{
 			System.out.println("File \"" + filename + "\" couldn't be opened");
 			return false;
 		}
-		
-		try {
+
+		try
+		{
 			objectInput = new ObjectInputStream(fos);
-		} catch (IOException e) {
-			System.out.println("Cannot read \"" + filename + "\" from FileInputStream");
+		} catch (IOException e)
+		{
+			System.out.println("Cannot read \"" + filename
+			        + "\" from FileInputStream");
 			return false;
 		}
-		
-		try {
-			schedule.setSchedule( (Schedule) objectInput.readObject()); // have to cast the object
+
+		try
+		{
+			schedule.setSchedule((Schedule) objectInput.readObject()); // have
+																	   // to
+																	   // cast
+																	   // the
+																	   // object
 			return true;
-		} catch (IOException e) {
-			System.out.println("Cannot read \"" + filename + "\" from ObjectInputStream");
-		} catch (ClassNotFoundException e) {
-			System.out.println("Cannot find class for the object when reading \"" + filename + "\"");
+		} catch (IOException e)
+		{
+			System.out.println("Cannot read \"" + filename
+			        + "\" from ObjectInputStream");
+		} catch (ClassNotFoundException e)
+		{
+			System.out
+			        .println("Cannot find class for the object when reading \""
+			                + filename + "\"");
 		}
-		
+
 		return false;
 	}
 
-	private static void openScheduleDialog() {
-		System.out.println("Give name of the file to be opened");
-		outputUtils.printPrompt();
-		String filename = input.nextLine().trim();
-		while (true) {
-			
-			if (!filename.endsWith(".dat")){
+	private static void openScheduleDialog()
+	{
+		do
+		{
+			String filename = InputUtils
+			        .askLine(
+			                "Give name of the file to be opened (empty line to cancel)")
+			        .trim();
+			if (filename.equals(""))
+				return;
+
+			if (!filename.endsWith(".dat"))
 				filename += ".dat";
-			}
-			
-			if (open(filename)){
-				break;
-			}
-			else {
-				System.out.println("Please enter the name of the file again");
-				System.out.println("You can exit with " + endCommand);
-				
-				filename = input.nextLine().trim();
-				if (filename.equals(endCommand)){
-					return;
-				}
-				
-			}
-		}
-		
-		
+
+			if (!open(filename))
+				continue;
+		} while (false);
 	}
 
-	private static void printCommands() {
+	private static void printCommands()
+	{
 		System.out.println("Commands");
 		System.out.println("--------");
 		System.out.println("[N]ew schedule");
 		System.out.println("[O]pen schedule from file");
-		if (schedule != null){
+		if (schedule != null)
+		{
 			System.out.println("[A]dd event to schedule");
 			System.out.println("[S]ave schedule to file");
 			System.out.println("[P]rint a report on screen");
@@ -296,97 +244,47 @@ public class Cli {
 		System.out.println("[Q]uit");
 	}
 
-	private static Report printReportDialog() {
-		Character command = null;
+	private static Report printReportDialog()
+	{
+		System.out.println("Which type of report do you want to print? Options are: ");
 
-		while (true) {
-			System.out.print("Which type of report do you want to print? Options are: ");
-			for (ReportFactory.ReportType type : ReportFactory.ReportType.values()){
-				// make types the way every other option is shown to user
-				System.out.print("[" + type.toString().charAt(0) + "]" + type.toString().substring(1).toLowerCase()); 
-				System.out.print(" ");
-			}
-			System.out.println("[N]one");
-			outputUtils.printPrompt();
-			command = sanitize(input.nextLine());
-			String in = null;
+		System.out.println("0: None");
+		List<String> reportTypes = ReportFactory.getReportTypes();
+		for (int i = 0; i < reportTypes.size(); i++)
+			System.out.println((i + 1) + ": " + reportTypes.get(i));
 
-			switch (command) {
-
-			case 'd':
-
-				System.out.println("Which day you want to see your schedule for?");
-				outputUtils.printDates();
-				outputUtils.printPrompt();
-				in = input.nextLine(); // 1
-				if (!outputUtils.checkDate(in)){
-					System.out.println("Unvalid date");
-					break;
-				}
-
-				Day day = Weekday.intToDay(Integer.parseInt(in));
-				return ReportFactory.makeReport(ReportFactory.ReportType.DAY, schedule, getOptions("day", day));
-
-			case 'f':
-				return ReportFactory.makeReport(ReportFactory.ReportType.FULL, schedule, null); // full report doesen't need options
-
-			case 'w':
-				ArrayList<Day> days = new ArrayList<Day>();
-
-				System.out.println("Which days you want to include in this report? You can end with \""+endCommand+"\"");
-				System.out.println("One at the time, please");
-
-				while (true){
-					// print only available dates
-					outputUtils.printDates(schedule);
-					outputUtils.printPrompt();
-
-					in = input.nextLine();
-					if (in.equals(endCommand)) {
-						break;
-					}
-					else if (!checkDate(in, schedule)){
-						System.out.println("Unvalid date");
-					}
-					else {
-						days.add(Weekday.intToDay(Integer.parseInt(in)));
-					}
-				}
-
-				return ReportFactory.makeReport(ReportFactory.ReportType.WEEK, schedule, getOptions("days", days));
-
-
-			case 'n':
-				System.out.println("Returning back to main menu");
-				return null;
-				
-			default:
-				System.out.println("Cannot parse " + command);
-				break;
-			}
-
-		}
+		int choice = InputUtils.askInt("Report type", 0, reportTypes.size());
+		if (choice == 0)
+			return null;
+		Report report = ReportFactory.makeReport(reportTypes.get(choice - 1),
+		        schedule, null);
+		report.askOptionsFromUser();
+		return report;
 	}
 
-	private static void printReportToFileDialog() {
+	private static void printReportToFileDialog()
+	{
 		Report report = printReportDialog();
-		if (report != null) {
+		if (report != null)
+		{
 			PrintWriter out = null;
 			String filename = null;
-			
-			System.out.println("Give full file name and path (if applicable)");
-			
-			while (true){
-				outputUtils.printPrompt();
-				try {
-					filename = input.nextLine().trim();
+
+			while (true)
+			{
+				try
+				{
+					filename = InputUtils.askLine("Enter the file name and path for the report (empty line to cancel)").trim();
+					if(filename.equals(""))
+						return;
 					out = new PrintWriter(filename);
 					break; // break out of the loop
-				} catch (FileNotFoundException e) {
+				} catch (FileNotFoundException e)
+				{
 					System.out.println("File " + filename + " was not found");
 				}
 			}
-			
+
 			System.out.print("Writing the file...");
 			out.print(report);
 			out.close();
@@ -394,75 +292,67 @@ public class Cli {
 		}
 	}
 
-	
-
-	private static Character sanitize(String rawInput){
+	private static Character sanitize(String rawInput)
+	{
 		return new Character(rawInput.toLowerCase().charAt(0));
 	}
 
-	private static boolean save(String filename) {
-	
-		// nullify static variable to be sure
-		objectOutput = null;
-		
+	private static boolean save(String filename)
+	{
+		ObjectOutputStream objectOutput = null;
 		FileOutputStream fos = null;
-		
-		try {
-			fos = new FileOutputStream(filename);	
-		} catch (FileNotFoundException e) {
-			System.out.println("Cannot open \"" + filename + "\", something's wrong with it");
+
+		try
+		{
+			fos = new FileOutputStream(filename);
+		} catch (FileNotFoundException e)
+		{
+			System.out.println("Cannot open \"" + filename
+			        + "\", something's wrong with it");
 			return false;
 		}
-		
-		try {
-			//output is Cli's static variable
+		try
+		{
 			objectOutput = new ObjectOutputStream(fos);
-		} catch (IOException e) {
+		} catch (IOException e)
+		{
 			System.out.println("Cannot write to \"" + filename + "\"");
 			return false;
 		}
-		
-		try {
+
+		try
+		{
 			objectOutput.writeObject(schedule);
 			objectOutput.close();
 			return true;
-		} catch (IOException e) {
+		} catch (IOException e)
+		{
 			System.out.println("Writing to \"" + filename + "\" failed");
 			return false;
 		}
-	
 	}
 
-	private static void saveScheduleDialog() {
-		System.out.println("Give name of the file to open");
-		System.out.println("Notice that file will be saved with .dat-extension, eg. \"myfile\" will be \"myfile.dat\" ");
-		outputUtils.printPrompt();
-		String filename = input.nextLine().trim() + ".dat";
-		while (true){
-			if (save(filename)){
+	private static void saveScheduleDialog()
+	{
+		String filename = null;
+		while (true)
+		{
+		filename = InputUtils.askLine("Give name of the file to open (empty line to cancel)").trim();
+		if(filename.equals(""))
+			return;
+		if (!filename.endsWith(".dat"))
+			filename += ".dat";
+			if(save(filename))
 				break;
-			}
-			else {
-				System.out.println("Please enter the name of the file again");
-				System.out.println("You can exit with " + endCommand);
-				filename = input.nextLine().trim() + ".dat";
-				
-				if (filename.trim().toLowerCase().equals(endCommand)) {
-					return;
-				}
-				
-
-			}
 		}
 		System.out.println("Schedule saved as \"" + filename + "\"");
 	}
 
-	public static void printReportDialogToScreenDialog() {
+	public static void printReportDialogToScreenDialog()
+	{
 		Report report = printReportDialog();
-		if (report != null){
+		if (report != null)
 			System.out.println(report);
-		}
-		
-	}	
+	}
 
 }
