@@ -12,8 +12,9 @@ import java.util.Map;
 import junit.framework.TestCase;
 import org.junit.*;
 
-import fi.helsinki.cs.scheduler3000.*;
-import fi.helsinki.cs.scheduler3000.Weekday.Day;
+import KaiSei.*;
+import KaiSei.Weekday.Day;
+
 
 public class ScheduleTest extends TestCase {
 

@@ -8,8 +8,9 @@ package tests;
 import junit.framework.TestCase;
 import org.junit.*;
 
-import fi.helsinki.cs.scheduler3000.Weekday;
-import fi.helsinki.cs.scheduler3000.Weekday.Day;
+import KaiSei.Weekday;
+import KaiSei.Weekday.Day;
+
 
 public class WeekdayTest extends TestCase {
 

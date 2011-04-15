@@ -3,11 +3,12 @@ package tests;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import fi.helsinki.cs.scheduler3000.Event;
-import fi.helsinki.cs.scheduler3000.FileOutput;
-import fi.helsinki.cs.scheduler3000.FileOutputFactory;
-import fi.helsinki.cs.scheduler3000.Weekday;
-import fi.helsinki.cs.scheduler3000.FileOutputFactory.FileType;
+import KaiSei.Event;
+import KaiSei.FileOutput;
+import KaiSei.FileOutputFactory;
+import KaiSei.Weekday;
+import KaiSei.FileOutputFactory.FileType;
+
 
 import junit.framework.TestCase;
 
