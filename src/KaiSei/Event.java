@@ -1,8 +1,12 @@
 package KaiSei;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 /**
  * @author Team TA's
  */
+
 
 
 public class Event implements Comparable<Event> {
@@ -16,16 +20,20 @@ public class Event implements Comparable<Event> {
 	private String endTime;
 	private String location;
 	private String title;
+	private GregorianCalendar end;
+	private GregorianCalendar start;
 	
 	public Event(String startTime, String endTime){
 		this.setStartTime(startTime);
 		this.setEndTime(endTime);
+		
 	}
 	
 	public Event(String startTime, String endTime, String title){
 		this.setStartTime(startTime);
 		this.setEndTime(endTime);
 		this.setTitle(title);
+		this.askTime();
 	}
 	
 	public Event(String startTime, String endTime, String title, String location){
@@ -33,11 +41,21 @@ public class Event implements Comparable<Event> {
 		this.setEndTime(endTime);
 		this.setTitle(title);
 		this.setLocation(location);
+		this.askTime();
 	}
 	
 	public String getLocation() {
 		return location;
 	} 
+	
+	private void askTime(){
+		//System.out.println();
+		System.out.println("Anna tapahtumasarjan alkuaika (dd.mm.yyyy)");
+		this.setStart(InputUtils.askDate());
+		System.out.println("Anna tapahtumasarjan loppuaika (dd.mm.yyyy)");
+		this.setEnd(InputUtils.askDate());
+		
+	}
 
 	public void setLocation(String location) {
 		this.location = location;
@@ -121,6 +139,38 @@ public class Event implements Comparable<Event> {
 	@Override
 	public int compareTo(Event arg0)
 	{
-		return (this.startTime.compareTo(((Event)arg0).startTime));
+		return (this.start.compareTo(arg0.end));//this.startTime.compareTo(((Event)arg0).startTime));
+	}
+
+	/**
+	 * @param start the start to set
+	 */
+	public void setStart(GregorianCalendar start)
+	{
+		this.start = start;
+	}
+
+	/**
+	 * @return the start
+	 */
+	public GregorianCalendar getStart()
+	{
+		return start;
+	}
+
+	/**
+	 * @param end the end to set
+	 */
+	public void setEnd(GregorianCalendar end)
+	{
+		this.end = end;
+	}
+
+	/**
+	 * @return the end
+	 */
+	public GregorianCalendar getEnd()
+	{
+		return end;
 	}
 }
