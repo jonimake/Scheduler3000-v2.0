@@ -20,6 +20,7 @@ public class ReportFactory {
 		reports.put("Full", FullReport.class);
 		reports.put("Day", DayReport.class);
 		reports.put("Week", WeekReport.class);
+		reports.put("Rolling", RollingReport.class);
 	}
 	
 	public static Report makeReport(String reportName, Schedule schedule, HashMap<String, Object> options){

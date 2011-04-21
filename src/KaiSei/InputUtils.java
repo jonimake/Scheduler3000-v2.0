@@ -1,8 +1,12 @@
 package KaiSei;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
@@ -75,12 +79,13 @@ public class InputUtils
 		int number = 0;
 		do
 		{
-			System.out.print(query + PROMPT);
+			System.out.println(query + PROMPT);
 			boolean success = true;
 			String line = input.nextLine();
 			try
 			{
 				number = Integer.parseInt(line);
+				
 			}
 			catch(NumberFormatException nfe)
 			{
@@ -143,5 +148,53 @@ public class InputUtils
 	{
 		System.out.println(query + PROMPT);
 		return input.nextLine();
+	}
+	
+	public static GregorianCalendar parseDate(String datestr)
+	{
+		//Scanner sc = new Scanner(System.in);
+		SimpleDateFormat sdf = new SimpleDateFormat("dd.mm.yyyy");
+		Date date = null;
+
+		do
+		{
+			//System.out.print(message + ": ");
+			try
+			{
+				date = sdf.parse(datestr);
+			} catch (ParseException e)
+			{
+				System.out.println("Vääränlainen syöte, anna päivämäärä muodossa dd.mm.yyyy");
+				continue;
+			}
+		} while (false);
+		GregorianCalendar gc = new GregorianCalendar();
+		gc.setTime(date);
+		gc.roll(GregorianCalendar.MONTH, false);
+		return gc;
+	}
+	
+	public static GregorianCalendar askDate()
+	{
+		Scanner sc = new Scanner(System.in);
+		SimpleDateFormat sdf = new SimpleDateFormat("dd.mm.yyyy");
+		Date date = null;
+
+		do
+		{
+			//System.out.print(message + ": ");
+			try
+			{
+				date = sdf.parse(sc.nextLine());
+			} catch (ParseException e)
+			{
+				System.out.println("Vääränlainen syöte, anna päivämäärä muodossa dd.mm.yyyy");
+				continue;
+			}
+		} while (false);
+		GregorianCalendar gc = new GregorianCalendar();
+		gc.setTime(date);
+		gc.roll(GregorianCalendar.MONTH, false);
+		return gc;
 	}
 }

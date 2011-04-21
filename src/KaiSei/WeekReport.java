@@ -61,7 +61,7 @@ public class WeekReport extends Report {
 					String entry = "\t"; // if event is null
 						
 					if (event.getLocation() != null) { 
-					  entry = event.getLocation()+"\t";
+					  entry = event.getTitle().substring(0, event.getTitle().length())+"\t";
 					}
 					
 					if (event.getStartTime().equals("08"))     { res[i][1] = entry; } 
