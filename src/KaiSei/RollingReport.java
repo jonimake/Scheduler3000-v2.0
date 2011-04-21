@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Collections;
+import java.util.Map.Entry;
+
+import KaiSei.Weekday.Day;
 
 public class RollingReport extends Report
 {
@@ -33,20 +36,29 @@ public class RollingReport extends Report
 	@Override
 	public String toString()
 	{
-		Map<String, String> mappi = new HashMap<String, String>();
+		Map<String, String> eventDayMap = new HashMap<String, String>();
 		GregorianCalendar now = (GregorianCalendar) GregorianCalendar.getInstance();
 		GregorianCalendar then = (GregorianCalendar) GregorianCalendar.getInstance();
 		int n = InputUtils.askInt("Kuinka monen viikon tapahtumat haluat printata?", 1, 52);
 		then.roll(Calendar.WEEK_OF_YEAR, n);
 		
 		String str = "";
-		ArrayList<Event> events = new ArrayList<Event>(); 
+		ArrayList<Event> events = new ArrayList<Event>();
 		
+		for(Entry<Day, List<Event>> ent: schedule.getSchedule().entrySet()) {
+			for(Event e : ent.getValue()) {
+				eventDayMap.put(e.getTitle(), ent.getKey().toString());
+				events.add(e);
+			}
+		}
+		
+		/*
 		for(List<Event> le : schedule.getSchedule().values()) {
 			//mappi.put(le., value)
 			events.addAll(le);
 		}
-		//Collections.sort(events);
+		*/
+		Collections.sort(events);
 		do {
 			str += "Viikko: " + now.get(Calendar.WEEK_OF_YEAR) +"\n";
 			for(Event e : events) {
@@ -57,7 +69,9 @@ public class RollingReport extends Report
 				if(now == null)
 					System.out.println("now on null");
 				if(e.getEnd().after(now)) {
-					str += "\t"+e.getTitle() + " " + e.getStartTime() + " - " + e.getEndTime() + " " + e.getLocation();
+					str += "\t" + eventDayMap.get(e.getTitle()) + " " + 
+						e.getTitle() + " " + e.getStartTime() + " - " + 
+						e.getEndTime() + " " + e.getLocation();
 					str += "\n";
 				}
 			}
